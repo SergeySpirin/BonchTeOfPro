@@ -9,6 +9,7 @@ struct File
     int id;
     
     string catalog_name;
+    
     string file_name;
     float file_size;
 };
@@ -53,36 +54,38 @@ void change_row(File* row)
 
 void get_catalog_size(File* pointer, int rows)
 {
-    for(int i = 0; i < 4; i++)
-    {
-        int cat_size = 0;
-        string cur_catalog_name = pointer[i].catalog_name;
-        string catalog_list = "";
-        catalog_list += cur_catalog_name;
-        for(int j = 0; j < rows; j++)
-        {
-            if(cur_catalog_name == pointer[j].catalog_name)
-            {
-                cat_size += pointer[j].file_size;
-            }
-        }
-        
-        cout << cur_catalog_name << " " << cat_size << ", МБ" << endl;
-       
-    }
+		string catalog_list = "";
+	    for(int i = 0; i < rows; i++)
+	    {
+	        int cat_size = 0;
+	        string cur_catalog_name = pointer[i].catalog_name;
+	        for(int j = 0; j < rows; j++)
+	        {
+	            if(cur_catalog_name == pointer[j].catalog_name)
+	            {
+	                cat_size += pointer[j].file_size;
+	            }
+	        }
+	        if(catalog_list.find(cur_catalog_name) != string::npos)
+			{
+			    cout << "";
+			}
+			else cout << cur_catalog_name << " " << cat_size << ", МБ" << endl;
+	        catalog_list += cur_catalog_name;
+	    }
 };
 
 void print_file_table(File* table, int rows)
 {
-    cout << endl;
-    cout << "Номер\t" << "Каталог\t" << "Файл\t" << "Размер, МБ\t" << endl;
-    for(int j = 0; j < rows; j++)
-    {
-        cout << j+1 << ": \t";
-        cout << table[j].catalog_name << "\t";
-        cout << table[j].file_name << "\t";
-        cout << table[j].file_size << "\t\n";
-    }
+	    cout << endl;
+	    cout << "Номер\t" << "Каталог\t" << "Файл\t" << "Размер, МБ\t" << endl;
+	    for(int j = 0; j < rows; j++)
+	    {
+	        cout << j+1 << ": \t";
+	        cout << table[j].catalog_name << "\t";
+	        cout << table[j].file_name << "\t";
+	        cout << table[j].file_size << "\t\n";
+	    }
 };
 
 int main()
