@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <fstream>
 
 using namespace std;
 
@@ -18,18 +19,19 @@ struct Catalog
     int size;
 };
 
-void get_file(File* pointer)
+void get_file(File* pointer, int rows)
 {
-        cout << "Введите название каталога: ";
-        cin >> pointer->catalog_name;
-        cout << "Введите имя файла: ";
-        cin >> pointer->file_name;
-        cout << "Введите размер файла, MB: ";
-        cin >> pointer->file_size;
-        
-        //cout << "Каталог: " << pointer->catalog_name << endl;
-        //cout << "Файл: " << pointer->file_name << endl;
-        //cout << "Размер, MB: " << pointer->file_size << endl;
+        ifstream data;
+        data.open("catalog.txt");
+        if (data.is_open())
+            {
+                for(int i = 0; i < rows; i++)
+                {
+                    cout << "1";
+                    data >> pointer[i].catalog_name >> pointer[i].file_name >> pointer[i].file_size;
+                }
+            }
+        data.close();
 };
 
 void print_file_table(File* table, int rows)
@@ -55,11 +57,6 @@ void change_row(File* row)
         cin >> row->file_size;
 };
 
-void calc_catalog_size()
-{
-    if
-};
-
 int main()
 {
     int rows_count = 2;
@@ -69,15 +66,13 @@ int main()
     string activity;
     int row_to_change;
     
-    for (int i = 0; i < rows_count; i++)
-    {
-        get_file(&files[i]);
-    }
+    get_file(files, rows_count);
+
     print_file_table(files, rows_count);
 
     do
     {
-        cout << "Что дальше: " << endl << "[1] Изменить строку" << endl << "[2] Выйти" << endl;
+        cout << "Что дальше: " << endl << "[1] Изменить строку" << endl << "[2] Сохранить файл" << endl << "[3] Выйти" << endl;
         cin >> activity;
         if(activity == "1")
         {
@@ -87,6 +82,10 @@ int main()
             print_file_table(files, rows_count);
         }
         else if(activity == "2")
+        {
+            Continue = false;
+        }
+        else if(activity == "3")
         {
             Continue = false;
         }
