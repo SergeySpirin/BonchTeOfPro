@@ -27,8 +27,21 @@ void get_file(File* pointer, int rows)
             {
                 for(int i = 0; i < rows; i++)
                 {
-                    cout << "1";
                     data >> pointer[i].catalog_name >> pointer[i].file_name >> pointer[i].file_size;
+                }
+            }
+        data.close();
+};
+
+void save_file(File* pointer, int rows)
+{
+        ofstream data;
+        data.open("catalog.txt");
+        if (data.is_open())
+            {
+                for(int i = 0; i < rows; i++)
+                {
+                    data << pointer[i].catalog_name << " " << pointer[i].file_name << " "  << pointer[i].file_size << endl;
                 }
             }
         data.close();
@@ -67,25 +80,30 @@ int main()
     int row_to_change;
     
     get_file(files, rows_count);
-
+    system("clear");
     print_file_table(files, rows_count);
-
     do
     {
-        cout << "Что дальше: " << endl << "[1] Изменить строку" << endl << "[2] Сохранить файл" << endl << "[3] Выйти" << endl;
+        cout << "Что дальше: " << endl << "[1] Изменить строку" << endl << "[2] Сохранить файл" << endl << "[3] Посчитать объем файлов в каталогах" << endl << "[4] Выйти" << endl;
         cin >> activity;
+        system("clear");
         if(activity == "1")
         {
-            cout << "Какую строку менять?";
+            cout << "Какую строку менять? -> ";
             cin >> row_to_change;
             change_row(&files[row_to_change-1]);
             print_file_table(files, rows_count);
         }
         else if(activity == "2")
         {
-            Continue = false;
+            save_file(files, rows_count);
+            print_file_table(files, rows_count);
         }
         else if(activity == "3")
+        {
+            Continue = false;
+        }
+        else if(activity == "4")
         {
             Continue = false;
         }
