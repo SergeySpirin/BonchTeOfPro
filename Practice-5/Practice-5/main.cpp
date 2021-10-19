@@ -13,12 +13,6 @@ struct File
     float file_size;
 };
 
-struct Catalog
-{
-    string name;
-    int size;
-};
-
 void get_file(File* pointer, int rows)
 {
         ifstream data;
@@ -47,6 +41,37 @@ void save_file(File* pointer, int rows)
         data.close();
 };
 
+void change_row(File* row)
+{
+        cout << "Введите новое название каталога: ";
+        cin >> row->catalog_name;
+        cout << "Введите новое имя файла: ";
+        cin >> row->file_name;
+        cout << "Введите новый размер файла, MB: ";
+        cin >> row->file_size;
+};
+
+void get_catalog_size(File* pointer, int rows)
+{
+    for(int i = 0; i < 4; i++)
+    {
+        int cat_size = 0;
+        string cur_catalog_name = pointer[i].catalog_name;
+        string catalog_list = "";
+        catalog_list += cur_catalog_name;
+        for(int j = 0; j < rows; j++)
+        {
+            if(cur_catalog_name == pointer[j].catalog_name)
+            {
+                cat_size += pointer[j].file_size;
+            }
+        }
+        
+        cout << cur_catalog_name << " " << cat_size << ", МБ" << endl;
+       
+    }
+};
+
 void print_file_table(File* table, int rows)
 {
     cout << endl;
@@ -60,21 +85,10 @@ void print_file_table(File* table, int rows)
     }
 };
 
-void change_row(File* row)
-{
-        cout << "Введите новое название каталога: ";
-        cin >> row->catalog_name;
-        cout << "Введите новое имя файла: ";
-        cin >> row->file_name;
-        cout << "Введите новый размер файла, MB: ";
-        cin >> row->file_size;
-};
-
 int main()
 {
-    int rows_count = 2;
+    int rows_count = 4;
     File files[rows_count];
-    Catalog catalog_list[rows_count];
     bool Continue = true;
     string activity;
     int row_to_change;
@@ -84,7 +98,8 @@ int main()
     print_file_table(files, rows_count);
     do
     {
-        cout << "Что дальше: " << endl << "[1] Изменить строку" << endl << "[2] Сохранить файл" << endl << "[3] Посчитать объем файлов в каталогах" << endl << "[4] Выйти" << endl;
+        cout << "Что дальше: " << endl << "[1] Изменить строку" << endl << "[2] Сохранить файл" << endl
+             << "[3] Посчитать объем файлов в каталогах" << endl << "[4] Выйти" << endl;
         cin >> activity;
         system("clear");
         if(activity == "1")
@@ -101,7 +116,8 @@ int main()
         }
         else if(activity == "3")
         {
-            Continue = false;
+            get_catalog_size(files, rows_count);
+            print_file_table(files, rows_count);
         }
         else if(activity == "4")
         {
