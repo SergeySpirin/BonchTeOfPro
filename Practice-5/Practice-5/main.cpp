@@ -16,76 +16,77 @@ struct File
 
 void get_file(File* pointer, int rows)
 {
-        ifstream data;
-        data.open("catalog.txt");
-        if (data.is_open())
+    ifstream data;
+    data.open("catalog.txt");
+    if (data.is_open())
+        {
+            for(int i = 0; i < rows; i++)
             {
-                for(int i = 0; i < rows; i++)
-                {
-                    data >> pointer[i].catalog_name >> pointer[i].file_name >> pointer[i].file_size;
-                }
+                data >> pointer[i].catalog_name >> pointer[i].file_name >> pointer[i].file_size;
             }
-        data.close();
+        }
+    else cout << "Can't open the file!" << endl;
+    data.close();
 };
 
 void save_file(File* pointer, int rows)
 {
-        ofstream data;
-        data.open("catalog.txt");
-        if (data.is_open())
+    ofstream data;
+    data.open("/Users/sergey/Documents/BonchTeOfPro/Practice-5/Practice-5/catalog.txt");
+    if (data.is_open())
+        {
+            for(int i = 0; i < rows; i++)
             {
-                for(int i = 0; i < rows; i++)
-                {
-                    data << pointer[i].catalog_name << " " << pointer[i].file_name << " "  << pointer[i].file_size << endl;
-                }
+                data << pointer[i].catalog_name << " " << pointer[i].file_name << " "  << pointer[i].file_size << endl;
             }
-        data.close();
+        }
+    data.close();
 };
 
 void change_row(File* row)
 {
-        cout << "Введите новое название каталога: ";
-        cin >> row->catalog_name;
-        cout << "Введите новое имя файла: ";
-        cin >> row->file_name;
-        cout << "Введите новый размер файла, MB: ";
-        cin >> row->file_size;
+    cout << "Введите новое название каталога: ";
+    cin >> row->catalog_name;
+    cout << "Введите новое имя файла: ";
+    cin >> row->file_name;
+    cout << "Введите новый размер файла, MB: ";
+    cin >> row->file_size;
 };
 
 void get_catalog_size(File* pointer, int rows)
 {
-		string catalog_list = "";
-	    for(int i = 0; i < rows; i++)
-	    {
-	        int cat_size = 0;
-	        string cur_catalog_name = pointer[i].catalog_name;
-	        for(int j = 0; j < rows; j++)
-	        {
-	            if(cur_catalog_name == pointer[j].catalog_name)
-	            {
-	                cat_size += pointer[j].file_size;
-	            }
-	        }
-	        if(catalog_list.find(cur_catalog_name) != string::npos)
-			{
-			    cout << "";
-			}
-			else cout << cur_catalog_name << " " << cat_size << ", МБ" << endl;
-	        catalog_list += cur_catalog_name;
-	    }
+    string catalog_list = "";
+    for(int i = 0; i < rows; i++)
+    {
+        int cat_size = 0;
+        string cur_catalog_name = pointer[i].catalog_name;
+        for(int j = 0; j < rows; j++)
+        {
+            if(cur_catalog_name == pointer[j].catalog_name)
+            {
+                cat_size += pointer[j].file_size;
+            }
+        }
+        if(catalog_list.find(cur_catalog_name) != string::npos)
+        {
+            cout << "";
+        }
+        else cout << cur_catalog_name << " " << cat_size << ", МБ" << endl;
+        catalog_list += cur_catalog_name;
+    }
 };
 
 void print_file_table(File* table, int rows)
 {
-	    cout << endl;
-	    cout << "Номер\t" << "Каталог\t" << "Файл\t" << "Размер, МБ\t" << endl;
-	    for(int j = 0; j < rows; j++)
-	    {
-	        cout << j+1 << ": \t";
-	        cout << table[j].catalog_name << "\t";
-	        cout << table[j].file_name << "\t";
-	        cout << table[j].file_size << "\t\n";
-	    }
+    cout << endl;
+    cout << "Номер\t" << "Каталог\t" << "Файл\t" << "Размер, МБ\t" << endl;
+    for(int j = 0; j < rows; j++)
+    {
+        cout << j+1 << ": \t";
+        cout << table[j].catalog_name << "\t";
+        cout << table[j].file_name << "\t";
+        cout << table[j].file_size << "\t\n";
+    }
 };
 
 int main()
