@@ -168,7 +168,7 @@ int main()
     File second_file("Catalog-1", "File-2", 200);
 
     int rows_count = 6;
-    File files[6]; 
+    File files[rows_count]; 
     files[0] = first_file;
     files[1] = second_file;
     
@@ -186,8 +186,10 @@ int main()
     print_file_table(files, rows_count);
     do
     {
-        cout << "Что дальше: " << endl << "[1] Изменить строку" << endl
-             << "[2] Посчитать объем файлов в каталогах" << endl << "[3] Выйти" << endl << ":";
+        cout << "Что дальше: " << endl 
+             << "[1] Изменить строку" << endl
+             << "[2] Посчитать объем файлов в каталогах" << endl
+             << "[3] Выйти" << endl << ":";
         cin >> activity;
         if(activity == "1")
         {
