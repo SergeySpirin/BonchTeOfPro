@@ -116,6 +116,7 @@ int main()
     
     for(int i = 2; i < rows_count; i++)
     {
+        cout << "Строка №" << i + 1 << endl;
         change_row(&files[i]);
     };
 
