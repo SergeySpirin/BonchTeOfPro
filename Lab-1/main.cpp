@@ -50,10 +50,10 @@ void get_catalog_size(File* pointer, int rows)
     int col1len = getMaxCatalogLength(pointer, rows); int col2len = 8; 
     cout << setw(col1len) << "Catalog" << setw(col2len) << "Size, MB" << endl;
     cout << setw(col1len) << "-------" << setw(col2len) << "--------" << endl;
-    string catalog_list = "";
+    string* catalog_list = new string[rows];
     for(int i = 0; i < rows; i++)
     {
-        int cat_size = 0;
+        int cat_size = 0; bool print = true;
         string cur_catalog_name = pointer[i].getCatalogName();
         for(int j = 0; j < rows; j++)
         {
@@ -61,13 +61,16 @@ void get_catalog_size(File* pointer, int rows)
             {
                 cat_size += pointer[j].getFileSize();
             }
+            if(cur_catalog_name == catalog_list[j])
+            {
+                print = false;
+            }
         }
-        if(catalog_list.find(cur_catalog_name) != string::npos)
+        if(print)
         {
-            cout << "";
+            cout << setw(col1len) << cur_catalog_name << setw(col2len) << cat_size << endl;
         }
-        else cout << setw(col1len) << cur_catalog_name << setw(col2len) << cat_size << endl;
-        catalog_list += cur_catalog_name;
+        catalog_list[i] = cur_catalog_name;
     }
     cout << endl;
 };
@@ -121,7 +124,7 @@ int main()
     };
 
     bool Continue = true;
-    string activity;
+    int activity;
     int row_to_change;
     system("clear");
     print_file_table(files, rows_count);
@@ -132,26 +135,33 @@ int main()
              << "[2] Посчитать объем файлов в каталогах" << endl
              << "[3] Выйти" << endl << ":";
         cin >> activity;
-        if(activity == "1")
-        {
-            cout << endl;
-            cout << "Какую строку менять? -> ";
-            cin >> row_to_change;
-            change_row(&files[row_to_change-1]);
-            system("clear");
-            print_file_table(files, rows_count);
+        switch (activity){
+            case 1:
+            {
+                cout << endl;
+                cout << "Какую строку менять? -> ";
+                cin >> row_to_change;
+                change_row(&files[row_to_change-1]);
+                system("clear");
+                print_file_table(files, rows_count);
+                break;
+            }
+            case 2:
+            { 
+                system("clear");
+                print_file_table(files, rows_count);
+                get_catalog_size(files, rows_count);
+                break;
+            }
+            case 3:
+            {
+                Continue = false;
+                break;
+            }
+            default: 
+                system("clear");
+                break;
         }
-        else if(activity == "2")
-        { 
-            system("clear");
-            print_file_table(files, rows_count);
-            get_catalog_size(files, rows_count);
-        }
-        else if(activity == "3")
-        {
-            Continue = false;
-        }
-        else system("clear");
     }
     while(Continue);
     system("clear");
