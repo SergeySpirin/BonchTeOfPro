@@ -32,7 +32,7 @@ int getMaxFileLength(File* files, int rows)
     return length + 4;
 };
 
-void change_row(File* row)
+void changeRow(File* row)
 {
     string catalog_name, file_name; float file_size;
     cout << "Введите новое название каталога: ";
@@ -45,7 +45,7 @@ void change_row(File* row)
     cout << endl;
 };
 
-void get_catalog_size(File* pointer, int rows)
+void getCatalogSize(File* pointer, int rows)
 {
     int col1len = getMaxCatalogLength(pointer, rows); int col2len = 8; 
     cout << setw(col1len) << "Catalog" << setw(col2len) << "Size, MB" << endl;
@@ -75,7 +75,7 @@ void get_catalog_size(File* pointer, int rows)
     cout << endl;
 };
 
-void print_file_table(File* table, int rows)
+void printFileTable(File* table, int rows)
 {
     int col1Len = 2; int col2len = getMaxCatalogLength(table, rows); int col3len = getMaxFileLength(table, rows); int col4len = 8;
     cout << endl;
@@ -103,31 +103,26 @@ int main()
     setlocale(LC_ALL, "");
     system("clear");
 
-    File first_file;
-    first_file.setCatalogName("Catalog-1");
-    first_file.setFileName("File-1"); 
-    first_file.setFileSize(100); 
-    
-    File second_file("Catalog-1", "File-2", 200);
-
-    int rows_count = 6;
+    int rows_count = 4;
     File files[rows_count]; 
-    files[0] = first_file;
-    files[1] = second_file;
-    
-    print_file_table(files, 2);
+    files[0].setCatalogName("Catalog-1");
+    files[0].setFileName("File-1");
+    files[0].setFileSize(100);
+    files[1] = File("Catalog-1", "File-2", 200); 
+   
+    printFileTable(files, 2);
     
     for(int i = 2; i < rows_count; i++)
     {
         cout << "Строка №" << i + 1 << endl;
-        change_row(&files[i]);
+        changeRow(&files[i]);
     };
 
     bool Continue = true;
     int activity;
     int row_to_change;
     system("clear");
-    print_file_table(files, rows_count);
+    printFileTable(files, rows_count);
     do
     {
         cout << "Что дальше: " << endl 
@@ -141,16 +136,16 @@ int main()
                 cout << endl;
                 cout << "Какую строку менять? -> ";
                 cin >> row_to_change;
-                change_row(&files[row_to_change-1]);
+                changeRow(&files[row_to_change-1]);
                 system("clear");
-                print_file_table(files, rows_count);
+                printFileTable(files, rows_count);
                 break;
             }
             case 2:
             { 
                 system("clear");
-                print_file_table(files, rows_count);
-                get_catalog_size(files, rows_count);
+                printFileTable(files, rows_count);
+                getCatalogSize(files, rows_count);
                 break;
             }
             case 3:
