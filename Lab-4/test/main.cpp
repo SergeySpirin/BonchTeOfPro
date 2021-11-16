@@ -2,9 +2,9 @@
 #include <iomanip>
 #include <string>
 
-#include "./headers/Vehicle.h"
-#include "./headers/Car.h"
-#include "./headers/Plane.h"
+#include "Vehicle.h"
+#include "Car.h"
+#include "Plane.h"
 
 using namespace std;
 

@@ -1,163 +1,132 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <iomanip>
-#include "explorer.h"
 
 using namespace std;
 
-int getMaxCatalogLength(File* files, int rows)
+struct File
 {
-    int length = 8;
-    for(int i = 0; i < rows; i++)
-    {
-        if(files[i].getCatalogName().length() > length)
-        {
-            length = files[i].getCatalogName().length();
-        };
-    };
-    return length + 4;
+    int id;
+    
+    string catalog_name;
+    
+    string file_name;
+    float file_size;
 };
 
-int getMaxFileLength(File* files, int rows)
+void get_file(File* pointer, int rows)
 {
-    int length = 8;
-    for(int i = 0; i < rows; i++)
-    {
-        if(files[i].getFileName().length() > length)
+    ifstream data;
+    data.open("catalog.txt");
+    if (data.is_open())
         {
-            length = files[i].getFileName().length();
-        };
-    };
-    return length + 4;
+            for(int i = 0; i < rows; i++)
+            {
+                data >> pointer[i].catalog_name >> pointer[i].file_name >> pointer[i].file_size;
+            }
+        }
+    else cout << "Can't open the file!" << endl;
+    data.close();
 };
 
-void changeRow(File* row)
+void save_file(File* pointer, int rows)
 {
-    string catalog_name, file_name; float file_size;
+    ofstream data;
+    data.open("/Users/sergey/Documents/BonchTeOfPro/Practice-5/Practice-5/catalog.txt");
+    if (data.is_open())
+        {
+            for(int i = 0; i < rows; i++)
+            {
+                data << pointer[i].catalog_name << " " << pointer[i].file_name << " "  << pointer[i].file_size << endl;
+            }
+        }
+    data.close();
+};
+
+void change_row(File* row)
+{
     cout << "Введите новое название каталога: ";
-    cin >> catalog_name;
+    cin >> row->catalog_name;
     cout << "Введите новое имя файла: ";
-    cin >> file_name;
+    cin >> row->file_name;
     cout << "Введите новый размер файла, MB: ";
-    cin >> file_size;
-    row->setCatalogName(catalog_name); row->setFileName(file_name); row->setFileSize(file_size);
-    cout << endl;
+    cin >> row->file_size;
 };
 
-void getCatalogSize(File* pointer, int rows)
+void get_catalog_size(File* pointer, int rows)
 {
-    int col1len = getMaxCatalogLength(pointer, rows); int col2len = 8; 
-    cout << setw(col1len) << "Catalog" << setw(col2len) << "Size, MB" << endl;
-    cout << setw(col1len) << "-------" << setw(col2len) << "--------" << endl;
-    string* catalog_list = new string[rows];
+    string catalog_list = "";
     for(int i = 0; i < rows; i++)
     {
-        int cat_size = 0; bool print = true;
-        string cur_catalog_name = pointer[i].getCatalogName();
+        int cat_size = 0;
+        string cur_catalog_name = pointer[i].catalog_name;
         for(int j = 0; j < rows; j++)
         {
-            if(cur_catalog_name == pointer[j].getCatalogName())
+            if(cur_catalog_name == pointer[j].catalog_name)
             {
-                cat_size += pointer[j].getFileSize();
-            }
-            if(cur_catalog_name == catalog_list[j])
-            {
-                print = false;
+                cat_size += pointer[j].file_size;
             }
         }
-        if(print)
+        if(catalog_list.find(cur_catalog_name) != string::npos)
         {
-            cout << setw(col1len) << cur_catalog_name << setw(col2len) << cat_size << endl;
+            cout << "";
         }
-        catalog_list[i] = cur_catalog_name;
+        else cout << cur_catalog_name << " " << cat_size << ", МБ" << endl;
+        catalog_list += cur_catalog_name;
     }
-    cout << endl;
 };
 
-void printFileTable(File* table, int rows)
+void print_file_table(File* table, int rows)
 {
-    int col1Len = 2; int col2len = getMaxCatalogLength(table, rows); int col3len = getMaxFileLength(table, rows); int col4len = 8;
     cout << endl;
-    cout << setw(col1Len) << left << "#" 
-        << setw(col2len) << "Catalog" 
-        << setw(col3len) << "File" 
-        << setw(col4len) << "Size, MB" << endl;
-    cout << setw(col1Len) << left << "-" 
-        << setw(col2len) << "-------" 
-        << setw(col3len) << "----" 
-        << setw(col4len) << "--------" << endl;
-
+    cout << "Номер\t" << "Каталог\t" << "Файл\t" << "Размер, МБ\t" << endl;
     for(int j = 0; j < rows; j++)
     {
-        cout << setw(col1Len) << j+1 <<
-                setw(col2len) << table[j].getCatalogName() << 
-                setw(col3len) << table[j].getFileName() <<
-                setw(col4len) << table[j].getFileSize() << endl;
+        cout << j+1 << ": \t";
+        cout << table[j].catalog_name << "\t";
+        cout << table[j].file_name << "\t";
+        cout << table[j].file_size << "\t\n";
     }
-    cout << endl;
 };
 
 int main()
 {
-    setlocale(LC_ALL, "");
-    system("clear");
-
     int rows_count = 4;
-    File files[rows_count]; 
-    files[0].setCatalogName("Catalog-1");
-    files[0].setFileName("File-1");
-    files[0].setFileSize(100);
-    files[1] = File("Catalog-1", "File-2", 200); 
-   
-    printFileTable(files, 2);
-    
-    for(int i = 2; i < rows_count; i++)
-    {
-        cout << "Строка №" << i + 1 << endl;
-        changeRow(&files[i]);
-    };
-
+    File files[rows_count];
     bool Continue = true;
-    int activity;
+    string activity;
     int row_to_change;
+    
+    get_file(files, rows_count);
     system("clear");
-    printFileTable(files, rows_count);
+    print_file_table(files, rows_count);
     do
     {
-        cout << "Что дальше: " << endl 
-             << "[1] Изменить строку" << endl
-             << "[2] Посчитать объем файлов в каталогах" << endl
-             << "[3] Выйти" << endl << ":";
+        cout << "Что дальше: " << endl << "[1] Изменить строку" << endl << "[2] Сохранить файл" << endl
+             << "[3] Посчитать объем файлов в каталогах" << endl << "[4] Выйти" << endl;
         cin >> activity;
-        switch (activity){
-            case 1:
-            {
-                cout << endl;
-                cout << "Какую строку менять? -> ";
-                cin >> row_to_change;
-                changeRow(&files[row_to_change-1]);
-                system("clear");
-                printFileTable(files, rows_count);
-                break;
-            }
-            case 2:
-            { 
-                system("clear");
-                printFileTable(files, rows_count);
-                getCatalogSize(files, rows_count);
-                break;
-            }
-            case 3:
-            {
-                Continue = false;
-                break;
-            }
-            default: 
-                system("clear");
-                break;
+        system("clear");
+        if(activity == "1")
+        {
+            cout << "Какую строку менять? -> ";
+            cin >> row_to_change;
+            change_row(&files[row_to_change-1]);
+            print_file_table(files, rows_count);
+        }
+        else if(activity == "2")
+        {
+            save_file(files, rows_count);
+            print_file_table(files, rows_count);
+        }
+        else if(activity == "3")
+        {
+            get_catalog_size(files, rows_count);
+            print_file_table(files, rows_count);
+        }
+        else if(activity == "4")
+        {
+            Continue = false;
         }
     }
     while(Continue);
-    system("clear");
 }
